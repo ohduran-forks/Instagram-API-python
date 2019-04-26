@@ -1,6 +1,7 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
 import requests
 import random
 import json
@@ -112,6 +113,17 @@ class InstagramAPI:
                     self.getRecentActivity()
                     print("Login success!\n")
                     return True
+ 
+    def get_user_id_by_username(self, username):
+        url_info = "https://www.instagram.com/%s/" % (username)
+        info = self.s.get(url_info)
+        json_info = json.loads(
+            re.search(
+                "window._sharedData = (.*?);</script>", info.text, re.DOTALL
+            ).group(1)
+        )
+        id_user = json_info["entry_data"]["ProfilePage"][0]["graphql"]["user"]["id"]
+        return id_user
 
     def syncFeatures(self):
         data = json.dumps({'_uuid': self.uuid,
