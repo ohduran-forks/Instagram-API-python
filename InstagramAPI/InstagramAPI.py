@@ -176,6 +176,7 @@ class InstagramAPI:
         if response.status_code == 200:
             if self.configure(upload_id, photo, caption):
                 self.expose()
+        self.errors = response.content
         return False
 
     def uploadVideo(self, video, thumbnail, caption=None, upload_id=None, is_sidecar=None):
